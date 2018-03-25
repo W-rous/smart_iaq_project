@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!--meta http-equiv="refresh" content="30"-->
+    <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+    <title>Home | SMART IAQ | An Intelligent Indoor Air Quality Monitoring System</title>
+    <link rel="shortcut icon" href="/static/images/smartiaq_icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Lusitana' rel='stylesheet'>
+<script>
+    function startTime() {
+    var today = new Date();
+    var yr = today.getFullYear();
+    var	mth = today.getMonth()+1;
+    var dt = today.getDate();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    mth = checkTime(mth);
+    dt = checkTime(dt);
+    m = checkTime(m);
+    s = checkTime(s);
+    var q = checkAMPM(h);
+    document.getElementById('txt').innerHTML =
+    yr + "-" + mth + "-" + dt + " " + h + ":" + m + ":" + s + " " + q;
+    var t = setTimeout(startTime, 500);
+}
+function checkAMPM(h){
+	if (h>=0 && h<12 ){a = "am";}
+	else {a = "pm";}
+	return a;
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
+function co2Cond() {
+            var co2Val = {{co2}};
+
+            if(co2Val >1000 && co2Val <=2000) {
+                document.getElementById('co2moderate').style.display = 'block'; 
+                document.getElementById('co2crit').style.display = 'none'; 
+                document.getElementById('co2optimum').style.display = 'none';
+            }else if (co2Val <= 1000){
+                document.getElementById('co2moderate').style.display = 'none'; 
+                document.getElementById('co2optimum').style.display = 'block';
+                document.getElementById('co2crit').style.display = 'none';
+            }else if (co2Val >2000){
+                document.getElementById('co2moderate').style.display = 'none';
+                document.getElementById('co2optimum').style.display = 'none';
+                document.getElementById('co2crit').style.display = 'block';
+            }
+ }
+function tempCond()
+        {
+            var tempVal = {{temp}};
+
+
+            if(tempVal > 27.00 || tempVal<20) {
+                document.getElementById('tempcrit').style.display = 'block'; 
+                document.getElementById('tempoptimum').style.display = 'none';
+            }else {
+                document.getElementById('tempcrit').style.display = 'none'; 
+                document.getElementById('tempoptimum').style.display = 'block';
+            }
+        }
+
+function humidCond()
+        {
+            var humidVal = {{humid}};
+
+
+            if(humidVal > 60.00 || humidVal<30.00) {
+                document.getElementById('humidcrit').style.display = 'block'; 
+                document.getElementById('humidoptimum').style.display = 'none';
+            }else {
+                document.getElementById('humidcrit').style.display = 'none'; 
+                document.getElementById('humidoptimum').style.display = 'block';
+            }
+        }
+function controlCond()
+        {
+            var humidVal = {{humid}};
+            var tempVal = {{temp}};
+            var co2Val = {{co2}};
+            var iaqstatus;
+            if(((humidVal > 60.00 || humidVal<30.00)||(tempVal > 27.00 || tempVal<20.00)||(co2Val>2000))) {
+                document.getElementById('iaqoptimum').style.display = 'none'; 
+                document.getElementById('iaqmoderate').style.display = 'none';
+                document.getElementById('iaqpoor').style.display = 'block';
+                iaqstatus="poor";
+            }else if(((humidVal <= 60.00 && humidVal>=30.00)&&(tempVal <= 27.00&&tempVal>=20.00)&&(co2Val<=1000))){
+                document.getElementById('iaqoptimum').style.display = 'block'; 
+                document.getElementById('iaqmoderate').style.display = 'none';
+                document.getElementById('iaqpoor').style.display = 'none';
+                iaqstatus="optimum";
+            }else if(((co2Val >1000 && co2Val <=2000)&& !((humidVal <= 60.00 && humidVal>=30.00)&&(tempVal <= 27.00&&tempVal>=20.00)&&(co2Val<=1000)) && !((humidVal > 60.00 || humidVal<30.00)||(tempVal > 27.00 || tempVal<20.00)||(co2Val>2000)))){           
+                document.getElementById('iaqoptimum').style.display = 'none'; 
+                document.getElementById('iaqmoderate').style.display = 'block';
+                document.getElementById('iaqpoor').style.display = 'none';
+                iaqstatus="moderate";
+            }
+
+            if(iaqstatus="poor"){document.getElementById('fanoptimum').style.display = 'none'; 
+                document.getElementById('fanmoderate').style.display = 'none';
+                document.getElementById('fanpoor').style.display = 'block';}
+            else if(iaqstatus="moderate"){document.getElementById('fanoptimum').style.display = 'none'; 
+                document.getElementById('fanmoderate').style.display = 'block';
+                document.getElementById('fanpoor').style.display = 'none';}
+            else if(iaqstatus="optimum"){document.getElementById('fanoptimum').style.display = 'block'; 
+                document.getElementById('fanmoderate').style.display = 'none';
+                document.getElementById('fanpoor').style.display = 'none';}
+        
+        }
+</script>
+    <style>
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+#myBtn:hover {
+  background-color: #555;
+}
+#tableid {
+    font-family: 'Lusitana', serif;
+    color: black;
+}
+ 
+h1 {
+    font-family: 'Lusitana', serif;
+}
+
+h1 b {
+	font-size: 25px;
+}
+.googlefont{
+	font-family: 'Lusitana', serif;
+	font-size: 20px;
+}
+hr.style1 { 
+  border: 0; 
+  height: 1px; 
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0); 
+}
+.nav-element-padding{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.background-img {
+	background: url('static/images/IAQ-bg2.jpg');
+	background-position: center;
+	margin: 0;
+	min-height: 12%;
+	max-height: 12%;
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	background-size: cover;
+	position: relative; 
+}
+.no-padding-container{
+	padding: 0px;
+}
+
+li.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+ html, body {
+      position: relative; 
+      height: 300%;
+      margin: 0;
+  }
+  #section1 {padding-top:50px;padding-bottom:90px;position:relative;height:auto;color: black; background-color: #E6E6FA;}
+  #section2 {padding-top:50px;padding-bottom:90px;position:relative;height:auto;color: black; background-color: #E6E6FA;}
+  #section3 {padding-top:50px;padding-bottom:90px;position:relative;height:auto;color: black; background-color: #E6E6FA;}
+
+</style>
+  </head>
+  <body onload="startTime();co2Cond();tempCond();humidCond();controlCond();">
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  <div class="container-fluid background-img no-padding-container">
+  <div class="container" style="padding: 0; max-height: 100%;min-height: 100%; height: 100%">
+  <div class="row" style="max-height: 42%;min-height: 42%; height: 100%;padding:0;position: relative">
+    <div class="col col-xs" style="max-height: 100%;min-height: 100%; height: 100%;padding: 0;position: relative">
+    <h1 class="font-weight-bold text-center" style="margin:0;padding:0;font-size: 78px;color: white;position: absolute;bottom: 2px;width:100%">SMART &nbsp;IAQ</h1>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col">
+    <hr class="style1">
+    </div>
+    </div>
+    <br>
+    <div class="row" style="max-height: 50%;min-height: 50%; height: 100%;padding:0;position: relative">
+    <div class="col">
+    <h1 class="font-weight-normal text-center" style="font-size: 30px; padding: 0;padding-top:10px">An Intelligent Indoor Air Quality Monitoring System</h1>
+    </div>
+    </div>
+ </div>
+ </div>
+
+  <nav id="navLeader" class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" >
+  <div class="container-fluid">
+  <div class="navbar-header">
+  <a href="http://www.ucsiuniversity.edu.my" target="_blank" class="navbar-brand googlefont"><img src="static/images/ucsi-logo.png" width="20" height="27" class="d-inline-block align-top" alt="">UCSI
+  University</a>
+  </div>
+  <button class="navbar-toggler" id="navbarButton" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-between" id="myNavbar">
+  <div></div>
+    <ul class="nav dropdown navbar-nav">
+    <li class="nav-item nav-element-padding">
+        <a class="nav-link googlefont" id="latest" href="#section1">Latest</a>
+      </li>	
+      <li class="nav-item nav-element-padding">
+        <a class="nav-link googlefont" id="power" href="#section2">Power</a>
+      </li>
+      <li class="nav-item nav-element-padding">
+        <a class="nav-link googlefont" id="past" href="{{url_for('past')}}">Past</a>
+      </li>
+      <li class="nav-item nav-element-padding">
+        <a class="nav-link googlefont" id="about"href="#section3">About</a>
+      </li>
+    </ul>
+    <div style="padding-left: 190px"></div>
+  </div>
+  </div>
+</nav>
+
+<div id="section1" class="container-fluid">
+  <h1  class="text-center" style="font-size: 40px;color: black;padding-top: 40px"><strong>LATEST</strong> Readings</h1>
+   <p class="text-center googlefont" style="font-size: 17px;color: black"><em>(this webpage will be refreshed every 30 seconds to update its contents)</em></p>
+  <p class="text-center googlefont" style="font-size: 17px;color: black"><em>(real time data: all readings are measured and updated dynamically once per approx. 10 minutes)</em></p>
+  <div class="row" style="padding-top: 30px">
+  	<div class="col">
+  	<h1 class="text-center" style="font-size: 25px;color: black" ><img src="https://png.icons8.com/ios/50/000000/watch.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Current Time:</h1>
+  	<h1 class="text-center font-weight-bold" style="font-size: 25px;color: black" id="txt"></h1>
+  	</div>
+  	<div class="col">
+  	<h1 class="text-center" style="font-size: 25px;color: black" ><img src="https://png.icons8.com/metro/50/000000/historical.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Last Measurement Time:</h1>
+ 	 <h1 class="text-center font-weight-bold" style="font-size: 25px;color: black" >{{ rDatetime }}</h1>
+ 	 </div>
+ </div>
+
+
+  <h1 class="text-center googlefont" style="font-size: 30px;color: black;padding-top: 40px"><img src="https://png.icons8.com/wired/50/000000/electronics.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Arduino Nano v3 Sensor Node</h1>
+   <hr class="style1">
+  <div class="row" style="padding-top: 10px">
+    <div class="col">
+    <h1 class="text-center" style="padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/ios/50/000000/co2-gauge.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Carbon Dioxide</h1>
+    <h1 class="text-center" style="font-size: 20px;color: black">(MH-Z14A)</h1>
+    <hr class="style1">
+    <h1 class="text-center" style="font-size: 5em;color: black;padding-top: 10px"><strong>{{co2}}</strong> <b>ppm</b></h1>
+    <div  align="center" id="co2moderate"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/error.png" width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>MODERATE LEVEL</strong></h1></div>
+    <div  align="center" id="co2crit"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/high-priority.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>CRITICAL LEVEL</strong></h1></div>
+    <div  align="center" id="co2optimum"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/ok.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>OPTIMUM LEVEL</strong></h1></div>
+</div>
+    <div class="col">
+     <h1 class="text-center" style="padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/android/50/000000/temperature.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Temperature</h1>
+     <h1 class="text-center" style="font-size: 20px;color: black">(DS18B20)</h1>
+     <hr class="style1">
+     <h1 class="text-center" style="font-size: 80px;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(temp)}}</strong> <b>&#8451</b></h1>
+     <div  align="center" id="tempcrit"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/high-priority.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>CRITICAL LEVEL</strong></h1></div>
+    <div  align="center" id="tempoptimum"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/ok.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>OPTIMUM LEVEL</strong></h1></div>    
+</div>
+    <div class="col">
+     <h1 class="text-center" style="padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/windows/50/000000/hygrometer.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Relative Humidity</h1>
+     <h1 class="text-center" style="font-size: 20px;color: black">(DHT22)</h1>
+     <hr class="style1">
+     <h1 class="text-center" style="font-size: 80px;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(humid) }}</strong> <b>%</b></h1>
+     <div  align="center" id="humidcrit"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/high-priority.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>CRITICAL LEVEL</strong></h1></div>
+    <div  align="center" id="humidoptimum"><h1 class="text-center" style="padding-top: 5px;padding-right:0px;font-size: 20px;color: black"><img src="https://png.icons8.com/color/50/000000/ok.png"width="50px" height="50px" style="padding-right:10px; padding-bottom:15px"><strong>OPTIMUM LEVEL</strong></h1></div>
+</div>
+</div>
+<h1 class="text-center googlefont" style="font-size: 30px;color: black;padding-top: 40px"><img src="https://png.icons8.com/ios/50/000000/vertical-settings-mixer.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Current Control Status</h1>
+<hr class="style1">
+<div class="row" style="padding-top: 10px">
+<div class="col-8">
+<h1  style="text-align:left;font-size: 30px;color: black;padding-top: 10px;padding-left:50px"><img src="https://png.icons8.com/ios/50/000000/air-quality.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Overall Indoor Air Quality:</h1>
+</div>
+<div class="col-4">
+<h1 id="iaqoptimum" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>Optimum</strong></h1>
+<h1 id="iaqmoderate" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>Moderate</strong></h1>
+<h1 id="iaqpoor" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>Poor</strong></h1>
+</div>
+<div class="col-8">
+<h1 style="text-align:left;font-size: 30px;color: black;padding-top: 10px;padding-left:50px"><img src="https://png.icons8.com/ios/50/000000/fan.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Fan/Ventilation System Speed:</h1>
+</div>
+<div class="col-4">
+<h1 id="fanpoor" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>High</strong></h1>
+<h1 id="fanmoderate" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>Medium</strong></h1>
+<h1 id="fanoptimum" class="text-center" style="font-size: 30px;color: black;padding-top: 10px"><strong>Low</strong></h1>
+</div>
+</div>
+</div>
+<div id="section2" class="container-fluid">
+ <h1  class="text-center" style="font-size: 40px;color: black;padding-top: 40px"><strong>POWER</strong> Monitor</h1>
+<p class="text-center googlefont" style="font-size: 17px;color: black"><em>(Mean basis: values are measured and calculated multiple times for averaging)</em></p>
+<h1 class="text-center" style="font-style:normal;padding-top: 40px;font-size: 30px;color: black"><img src="https://png.icons8.com/wired/50/000000/electronics.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Arduino Nano v3 Sensor Node</h1>
+   <hr class="style1">
+  <div class="row" style="padding-top: 10px">
+    <div class="col">
+    <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/ios-glyphs/50/000000/electro-devices.png"width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Current Consumption</h1>
+<hr class="style1">
+    <h1 class="text-center" style="font-style:normal;font-size: 5em;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(avga)}}</strong> <b>mA</b></h1>
+    </div>
+    <div class="col">
+     <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/wired/50/000000/time-span.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Measurement Interval</h1>
+<hr class="style1">
+     <h1 class="text-center" style="font-style:normal;font-size: 80px;color: black;padding-top: 10px"><strong>{{sleeptime}}</strong> <b>min</b></h1>
+    </div>
+    <div class="col">
+     <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/material/50/000000/time-machine.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Measurement Duration</h1>
+<hr class="style1">
+     <h1 class="text-center" style="font-style:normal;font-size: 80px;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(measuretime)}}</strong> <b>s</b></h1>
+    </div>
+</div>
+  <div class="row" style="padding-top: 10px">
+    <div class="col">
+    <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/ios-glyphs/50/000000/electro-devices.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Battery Voltage</h1>
+    <hr class="style1">
+    <h1 class="text-center" style="font-style:normal;font-size: 5em;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(battvol)}}</strong> <b>V</b></h1>
+    </div>
+    <div class="col">
+     <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/android/50/000000/medium-battery.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Battery Capacity</h1>
+     <hr class="style1">
+     <h1 class="text-center" style="font-style:normal;font-size: 80px;color: black;padding-top: 10px"><strong>{{battlvl}}</strong> <b>%</b></h1>
+    </div>
+    <div class="col">
+     <h1 class="text-center" style="font-style:normal;padding-top: 10px;font-size: 30px;color: black"><img src="https://png.icons8.com/ios-glyphs/50/000000/electro-devices.png" width="35px" height="40px" style="padding-right:10px; padding-bottom:15px">Nano Voltage</h1>
+     <hr class="style1">
+     <h1 class="text-center" style="font-style:normal;font-size: 80px;color: black;padding-top: 10px"><strong>{{"{0:.2f}".format(nanovolt)}}</strong> <b>V</b></h1>
+    </div>
+</div>
+</div>
+
+<div id="section3" class="container-fluid">
+<h1  class="text-center" style="font-style:normal;font-size: 40px;color: black;padding-top: 40px"><strong>ABOUT</strong></h1> 
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><strong>The image of the arduino nano v3 sensor node is shown as below:</strong></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><em>//To Be Attached//</em></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><strong>The technical specifications/datasheets of the sensors used are attached as below:</strong></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Carbon Dioxide sensor: <a target="_blank" href="/static/files/co2_mh-z14a_datasheet.pdf">MH-Z14A datasheet</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Temperature sensor: <a target="_blank" href="/static/files/DS18B20_datasheet.pdf">DS18B20 datasheet</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Humidity sensor: <a target="_blank" href="/static/files/dht22_datasheet.pdf">DHT22 datasheet</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><strong>Links to Indoor Air Quality guidelines and exposure limits:</strong></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Carbon Dioxide: <a target="_blank" href="https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms">What are safe levels of CO and CO2 in rooms?</a>   and   <a target="_blank" href="https://www.osha.gov/dts/chemicalsampling/data/CH_225400.html">Carbon Dioxide | Occupational Safety and Health Administration </a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Temperature and Humidity: <a target="_blank" href="https://www.osha.gov/dts/osta/otm/otm_iii/otm_iii_2.html#5">Indoor Air Quality Investigation | Occupational Safety and Health Administration</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Overall IAQ: <a target="_blank" href="https://www.uvic.ca/ohse/assets/docs/iaq_levels.pdf">Acceptable Indoor Air Quality Levels</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><strong>Links to the whole project source code:</strong></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Github Respository: <a target="_blank" href="">Project Source Code</a></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px"><strong>Icons User Interface: </strong></h1>
+<h1  style="text-align:left;font-size: 20px;color: black;padding-top: 10px;padding-left:50px">Acknowledgement: <a target="_blank" href="https://icons8.com">Icon pack by Icons8</a></h1>
+</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->                   
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script> 
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+
+
+$(document).on('click','.navbar-collapse',function(e) {
+    if( $(e.target).is('a') ) {
+        $(this).collapse('hide');
+    }
+});
+
+$(document).click(function(e) {
+        if (!$(e.target).is('#navbarButton,#latest,#power,#past,#about')) {
+        $('.navbar-collapse').collapse('hide');
+    }
+});
+    $(document).ready(function () {
+
+    $(function () {
+        $('li a').click(function (e) {
+            $('a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+
+});
+
+  window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}
+$(document).ready(function(){
+  // Add scrollspy to <body>
+  $('body').scrollspy({target: ".navbar", offset: 50});   
+
+  // Add smooth scrolling on all links inside the navbar
+  $("#myNavbar a").on('click', function(event) {
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    }  // End if
+  });
+});
+</script>
+  </body>
+</html>

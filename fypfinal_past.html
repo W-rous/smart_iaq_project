@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!--meta http-equiv="refresh" content="20"-- >
+    <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+    <title>Past data | SMART IAQ | An Intelligent Indoor Air Quality Monitoring System</title>
+    <link rel="shortcut icon" href="/static/images/smartiaq_icon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Lusitana' rel='stylesheet'>
+<script>
+</script>
+    <style>
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+#myBtn:hover {
+  background-color: #555;
+}
+
+#tableid {
+    font-family: 'Lusitana', serif;
+    color: black;
+}
+ 
+h1 {
+    font-family: 'Lusitana', serif;
+}
+
+h1 b {
+	font-size: 25px;
+}
+.googlefont{
+	font-family: 'Lusitana', serif;
+	font-size: 20px;
+}
+hr.style1 { 
+  border: 0; 
+  height: 1px; 
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0); 
+}
+.nav-element-padding{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.background-img {
+	background: url('static/images/IAQ-bg2.jpg');
+	background-position: center;
+	margin: 0;
+	min-height: 10.2%;
+	max-height: 10.2%;
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	background-size: cover;
+	position: relative; 
+}
+.no-padding-container{
+	padding: 0px;
+}
+
+li.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+ html, body {
+      position: relative; 
+      height: 500%;
+      margin: 0;
+  }
+  #section1 {padding-top:50px;height:11%;color: #fff; background-color: #E6E6FA;}
+  #section2 {padding-top:0px;color: black; background-color:  #FFFFFF;}
+  #section3 {padding-top:50px;height:500px;color: #fff; background-color: #ff9800;}
+
+</style>
+  </head>
+  <body>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>  
+<nav id="navLeader" class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" >
+  <div class="container-fluid">
+  <div class="navbar-header">
+  <a href="http://www.ucsiuniversity.edu.my" target="_blank" class="navbar-brand googlefont"><img src="static/images/ucsi-logo.png" width="20" height="27" class="d-inline-block align-top" alt="">UCSI
+  University</a>
+  </div>
+  <button id="navbarButton" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-between" id="myNavbar">
+  <div></div>
+    <ul class="nav dropdown navbar-nav">
+    <li class="nav-item nav-element-padding">
+        <a id="homepage" class="nav-link googlefont" href="{{url_for('home')}}">Homepage</a>
+      </li>	
+      <li class="dropdown nav-item nav-element-padding">
+        <a id="past" class="dropdown-toggle nav-link googlefont" id="current" data-toggle="dropdown" target="_blank" href="#section2">Past
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu bg-dark ">
+          <li id="co2" class="nav-item"><a class="nav-link bg-dark googlefont" style="padding-left: 30px" href="#section2">Carbon Dioxide</a></li>
+          <li id="temp" class="nav-item"><a class="nav-link bg-dark googlefont" style="padding-left: 30px" href="#tempsection">Temperature</a></li>
+          <li id="humid" class="nav-item"><a class="nav-link bg-dark googlefont" style="padding-left: 30px" href="#humidsection">Humidity</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div style="padding-left: 190px"></div>
+  </div>
+  </div>
+</nav>
+
+<div id="section2" class="container" style="margin:0">
+<div style="padding-top:30px">
+ <h1 class="" style="text-align:left;font-size: 40px;color: black;padding-top: 60px"><strong>PAST</strong> Readings</h1>
+<h1 style="font-size: 17px;color: black;padding-top: 0px"><strong>Option 1: </strong>Select data by specific date range</h1>
+<form id="datetime_range" action="/past" method="GET">
+<div class="row googlefont" style="padding-bottom:20px">
+<div class="col-3">
+<label for="from">From date</label>
+<input class="form-control" id="datetimepicker1" type="text" value="{{from_date}}" name="from">
+</div>
+<div class="col-3">
+<label for="to">To date</label>
+<input class="form-control" id="datetimepicker2" type="text" value="{{to_date}}" name="to">
+</div>
+<div class="col-2">
+<input class="btn btn-primary" type="submit" value="Submit" style="position:relative; top: 38px" id="submit_button" /> 
+</div>
+</div>
+</form>
+
+<h1 style="font-size: 20px;color: black;padding-top: 0px">OR</h1>
+<h1 style="font-size: 17px;color: black;padding-top: 0px"><strong>Option 2: </strong>Select data by time range from now</h1>
+<form id="range_select" action="/past" method="GET" >
+<div class="row googlefont" style="padding-bottom:30px"> 
+<div class="col-1">
+<div class="custom-control custom-radio custom-control-inline">
+  <input  type="radio" id="radio_3" name="range_h" value="3" class="custom-control-input">
+  <label class="custom-control-label" for="radio_3">3hrs</label>
+</div>
+</div>
+<div class="col-1">
+<div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" id="radio_6" name="range_h" value="6" class="custom-control-input">
+  <label class="custom-control-label" for="radio_6">6hrs</label>
+</div>
+</div>
+<div class="col-1">
+<div class="custom-control custom-radio custom-control-inline">
+  <input  type="radio" id="radio_12" name="range_h" value="12" class="custom-control-input">
+  <label class="custom-control-label" for="radio_12">12hrs</label>
+</div>
+</div>
+<div class="col-1">
+<div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" id="radio_24" name="range_h" value="24" class="custom-control-input">
+  <label class="custom-control-label" for="radio_24">24hrs</label>
+</div>
+</div>
+</div>
+</form>
+
+
+<h1 style="font-size: 17px;color: black;padding-top: 0px">Showing all records</h1>
+  <h1 style="font-size: 40px;color: black;padding-top: 0px">Carbon Dioxide</h1>
+<div class="row">
+<div class="col-4">
+<table id="tableid" class="table table-hover">
+<thead class="thead-light">
+<tr>
+<th>Date</th>
+<th>ppm</th>
+</tr>
+</thead>
+<tbody>
+{% for row in co2All %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class='col-8'>
+<div id="chart_co2All" style="padding-left:0px"></div>
+</div>
+</div>
+<div id="tempsection" style="padding-top: 80px"></div>
+<h1 style="font-size: 17px;color: black;padding-top: 0px">Showing all records</h1>
+  <h1 style="font-size: 40px;color: black;padding-top: 0px">Temperature</h1>
+<div class="row">
+<div class="col-4">
+<table id="tableid" class="table table-hover">
+<thead class="thead-light">
+<tr>
+<th>Date</th>
+<th>&#8451</th>
+</tr>
+</thead>
+<tbody>
+{% for row in tempAll %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{'%0.2f'|format(row[1])}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class='col-8'>
+<div id="chart_tempAll" style="padding-left:0px"></div>
+</div>
+</div>
+<div id="humidsection" style="padding-top: 80px"></div>
+<h1  style="font-size: 17px;color: black;padding-top: 0px">Showing all records</h1>
+  <h1 style="font-size: 40px;color: black;padding-top: 0px">Humidity</h1>
+<div class="row">
+<div class="col-4">
+<table id="tableid" class="table table-hover">
+<thead class="thead-light">
+<tr>
+<th>Date</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+{% for row in humidAll %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{'%0.2f'|format(row[1])}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class='col-8'>
+<div id="chart_humidAll" style="padding-left:0px"></div>
+</div>
+</div>
+</div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->                   
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    
+<script>
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+    $(document).ready(function () {
+    $( "#range_select input[type=radio]").click(function() {
+  $( "#range_select").submit();
+});
+}); 
+$(document).on('click','.navbar-collapse',function(e) {
+    if( $(e.target).is('a:not(".dropdown-toggle")') ) {
+        $(this).collapse('hide');
+    }
+});
+
+$(document).click(function(e) {
+        if (!$(e.target).is('#navbarButton,#homepage,#past,#co2,#temp,#humid')) {
+        $('.navbar-collapse').collapse('hide');
+    }
+});
+    $(document).ready(function () {
+
+    $(function () {
+        $('li a').click(function (e) {
+            $('a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+
+});
+
+    window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}
+$(document).ready(function(){
+  // Add scrollspy to <body>
+  $('body').scrollspy({target: ".navbar", offset: 50});   
+
+  // Add smooth scrolling on all links inside the navbar
+  $("#myNavbar a").on('click', function(event) {
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    }  // End if
+  });
+});
+</script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/ >
+<script src="/static/javascript/jquery.js"></script>
+<script src="/static/javascript/jquery.datetimepicker.full.min.js"></script>
+
+<script>
+$(document).ready(function () {
+$('#datetimepicker1').datetimepicker(
+{
+format:'Y-m-d H:i',
+defaultDate:'{{from_date}}'
+});
+$('#datetimepicker2').datetimepicker({
+format:'Y-m-d H:i',
+defaultDate:'{{to_date}}'
+});
+});
+
+</script>
+
+
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+  
+<script>
+    google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Time');  
+      data.addColumn('number', 'Carbon Dioxide');      
+      data.addRows([
+          {% for row in co2All %} 
+            [new Date({{row[0][0:4]}},{{row[0][5:7]}},{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),
+                {{row[1]}}],
+          {% endfor %}
+        ]);
+      var options = {
+        width: 800,
+        height: 863,
+        pointSize: 10,
+        hAxis: {
+          title: "Date",
+          gridlines: { count: {{co2All_items}}, color: '#CCC' },
+          format: 'dd-MMM-yyyy HH:mm' },
+        vAxis: {
+          title: "Parts per million (PPM)"
+          
+        },
+        title: 'Carbon Dioxide',
+        curveType: 'function'  
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('chart_co2All'));
+      chart.draw(data, options);
+    }
+  </script>
+  <script>
+    google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Time');  
+      data.addColumn('number', 'Temperature');      
+      data.addRows([
+          {% for row in tempAll %} 
+            [new Date({{row[0][0:4]}},{{row[0][5:7]}},{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),
+                {{row[1]}}],
+          {% endfor %}
+        ]);
+      var options = {
+        width: 800,
+        height: 863,
+        pointSize: 10,
+        hAxis: {
+          title: "Date",
+          gridlines: { count: {{tempAll_items}}, color: '#CCC' },
+          format: 'dd-MMM-yyyy HH:mm' },
+        vAxis: {
+          title: 'Degrees (°C)'
+        },
+        title: 'Temperature',
+        curveType: 'function'  //Makes line curved
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('chart_tempAll'));
+      chart.draw(data, options);
+    }
+  </script>
+  <script>
+    google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Time');  
+      data.addColumn('number', 'Humidity');      
+      data.addRows([
+          {% for row in humidAll %} 
+            [new Date({{row[0][0:4]}},{{row[0][5:7]}},{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),
+                {{row[1]}}],
+          {% endfor %}
+        ]);
+      var options = {
+        width: 800,
+        height: 863,
+        pointSize: 10,
+        hAxis: {
+          title: "Date",
+          gridlines: { count: {{humidAll_items}}, color: '#CCC' },
+          format: 'dd-MMM-yyyy HH:mm' },
+        vAxis: {
+          title: 'Percent (%)'
+        },
+        title: 'Humidity',
+        curveType: 'function'  //Makes line curved
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('chart_humidAll'));
+      chart.draw(data, options);
+    }
+  </script>
+</body>
+</html>
