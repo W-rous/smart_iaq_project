@@ -163,7 +163,7 @@ int getCo2(){
     riseTime = correctedRiseTime;
   }
   Serial.print(riseTime/1000); Serial.println(" ms ");
-  long co2Value = (5 * ((riseTime/1000) - 2)) -800;//- 800 ;
+  long co2Value = (5 * ((riseTime/1000) - 2)) -650;//- 800 ;
   co2ValueInt = (int) co2Value;
   Serial.print("co2Value is: ");
   Serial.println(co2Value);
@@ -175,7 +175,7 @@ int getCo2(){
     riseTime = correctedRiseTime;
     }
     Serial.print(riseTime/1000); Serial.println(" ms ");
-    long co2Value = (5 * ((riseTime/1000) - 2)) -800;//- 800 ;
+    long co2Value = (5 * ((riseTime/1000) - 2)) -650;//- 800 ;
     co2ValueInt = (int) co2Value;
     Serial.print("co2Value is: ");
     Serial.println(co2Value);
